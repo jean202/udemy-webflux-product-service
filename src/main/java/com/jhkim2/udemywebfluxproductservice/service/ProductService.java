@@ -4,6 +4,7 @@ import com.jhkim2.udemywebfluxproductservice.dto.ProductDto;
 import com.jhkim2.udemywebfluxproductservice.repository.ProductRepository;
 import com.jhkim2.udemywebfluxproductservice.util.EntityDtoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Range;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,6 +24,12 @@ public class ProductService {
         return this.repository.findById(id)
             .map(EntityDtoUtil::toDto);
     }
+
+    public Flux<ProductDto> getProductByPriceRange(int min, int max) {
+        return this.repository.findByPriceBetween(Range.closed(min, max))
+            .map(EntityDtoUtil::toDto);
+    }
+
 
     public Mono<ProductDto> insertProduct(Mono<ProductDto> productDtoMono) {
         return productDtoMono
